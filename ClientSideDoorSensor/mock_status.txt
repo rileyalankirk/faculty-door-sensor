@@ -1,0 +1,4 @@
+coleman,CLOSED
+bush,CLOSED
+schaper,CLOSED
+mota,OPEN
