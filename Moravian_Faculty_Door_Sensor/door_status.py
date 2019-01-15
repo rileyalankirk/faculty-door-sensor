@@ -1,6 +1,7 @@
 
 import requests
 import json
+import os
 
 
 def get_status(url):
@@ -10,7 +11,7 @@ def get_status(url):
     return door_status['state']
 
 
-openHAB_IP = '10.76.100.166'
+openHAB_IP = 'http://172.31.228.44'
 coleman_url = 'http://{}:8080/rest/items/ColemanDoor_BinarySensor'.format(openHAB_IP)
 schaper_url = 'http://{}:8080/rest/items/SchaperDoor_BinarySensor'.format(openHAB_IP)
 bush_url = 'http://{}:8080/rest/items/BushDoor_BinarySensor'.format(openHAB_IP)
@@ -50,12 +51,12 @@ class DoorStatus:
     def is_door_name(self, name):
         # Parameters passed at end of URL
         name = name.lower()
-        f_in = open('config.txt', 'r')
+        dir_path = os.path.dirname(os.path.realpath('config.txt'))
+        f_in = open(dir_path + '/config.txt', 'r')
         door_name = []
         for line in f_in:
             line = line.strip()
-            door, link = line.split(',')
-            door_name.append(door)
+            door_name.append(line)
         f_in.close()
 
         if name in door_name:
