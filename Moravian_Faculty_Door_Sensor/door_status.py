@@ -1,7 +1,7 @@
 
 import requests
 import json
-
+import os
 
 def get_status(url):
 
@@ -48,13 +48,15 @@ class DoorStatus:
     def is_door_name(self, name):
         # Checking status of names in the config.txt file.
         name = name.lower()
-        f_in = open('config.txt', 'r')
+        dir_path = os.path.dirname(os.path.realpath('config.txt'))
+        infile = open(dir_path + '/config.txt', 'r')
         door_name = []
-        for line in f_in:
+        for line in infile:
             line = line.strip()
+            # Link Variable is not being used currently.
             door, link = line.split(',')
             door_name.append(door)
-        f_in.close()
+        infile.close()
 
         if name in door_name:
             return True
