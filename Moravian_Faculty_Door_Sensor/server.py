@@ -1,6 +1,9 @@
 
 from flask import Flask, request
 from door_status import DoorStatus
+import logging
+
+logging.basicConfig(filename='example.log', level=logging.INFO)
 
 
 class Server:
@@ -35,5 +38,10 @@ def is_door_name():
         return "No name given", 404
 
 
+logging.info('Initializing server...')
 if __name__ == '__main__':
-    server.app.run(host='0.0.0.0', debug=True)
+    logging.info('Server beginning to run...')
+    server.app.run(host='0.0.0.0', debug=False)
+    logging.info('Server successfully stopped.')
+
+

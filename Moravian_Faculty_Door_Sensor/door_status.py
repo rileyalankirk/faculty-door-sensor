@@ -49,7 +49,10 @@ class DoorStatus:
         # Checking status of names in the config.txt file.
         name = name.lower()
         dir_path = os.path.dirname(os.path.realpath('config.txt'))
-        infile = open(dir_path + '/config.txt', 'r')
+        if dir_path == '/home/pi':
+            infile = open(dir_path + '/faculty-door-sensor/Moravian_Faculty_Door_Sensor/config.txt', 'r')
+        else:
+            infile = open(dir_path + '/config.txt', 'r')
         door_name = []
         for line in infile:
             line = line.strip()

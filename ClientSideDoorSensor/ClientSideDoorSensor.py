@@ -24,11 +24,10 @@ class ClientSideDoorSensor:
         door_status = {}
         dct = {}
         dir_path = os.path.dirname(os.path.realpath('config.txt'))
-        infile = open(dir_path + '/config.txt', 'r')
-
-        # Line below finds the path of the txt file exactly like above, however, the above way is not hard coded.
-        #infile = open('/home/pi/faculty-door-sensor/ClientSideDoorSensor/config.txt', 'r')
-
+        if dir_path == '/home/pi':
+            infile = open(dir_path + '/faculty-door-sensor/ClientSideDoorSensor/config.txt', 'r')
+        else:
+            infile = open(dir_path + '/config.txt', 'r')
         for door_name in infile:
             if self.is_door_name(is_door_name_url + door_name):
                 door_name = door_name.strip()
