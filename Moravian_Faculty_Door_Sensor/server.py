@@ -10,6 +10,7 @@ class Server:
         self.doors = DoorStatus()
 
 
+# Instantiating a server variable using the Server class.
 server = Server()
 
 
@@ -20,8 +21,6 @@ def get_status():
         name = request.args['name']
         if name is None:
             return "No name given", 404
-#       if page_not_found():
-#            return "404 Error: Wrong url", 404
         return server.doors.get_status(name), 200
     except KeyError:
         return "Name not found", 400

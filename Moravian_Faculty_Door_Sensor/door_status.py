@@ -10,7 +10,7 @@ def get_status(url):
     return door_status['state']
 
 
-openHAB_IP = '10.76.100.166'
+openHAB_IP = '172.31.228.44'
 coleman_url = 'http://{}:8080/rest/items/ColemanDoor_BinarySensor'.format(openHAB_IP)
 schaper_url = 'http://{}:8080/rest/items/SchaperDoor_BinarySensor'.format(openHAB_IP)
 bush_url = 'http://{}:8080/rest/items/BushDoor_BinarySensor'.format(openHAB_IP)
@@ -23,7 +23,7 @@ urls = {'coleman': coleman_url,
 
 
 class DoorStatus:
-
+    # Checking status of provided door name.
     def get_status(self, name):
 
         if name not in urls and len(name) > 0:                 # Invalid Name
@@ -33,8 +33,6 @@ class DoorStatus:
             return "No name provided! Example: coleman";
 
         try:
-            # Would we put the above if and elif right here?
-
             result = requests.get(urls[name])
             door_status = json.loads(result.text)
 
@@ -44,11 +42,11 @@ class DoorStatus:
             else:
                 return door_status['state']  # Valid Name, Valid Door Status
 
-        except KeyError or TypeError:        # Generic Catch -- Do we need the try/except still?
-            return                           # How will error codes and msg be together?
+        except KeyError or TypeError:        # Generic Catch
+            return
 
     def is_door_name(self, name):
-        # Parameters passed at end of URL
+        # Checking status of names in the config.txt file.
         name = name.lower()
         f_in = open('config.txt', 'r')
         door_name = []
