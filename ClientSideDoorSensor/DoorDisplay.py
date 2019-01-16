@@ -87,8 +87,8 @@ def data_change(root):
 
     sensor = ClientSideDoorSensor()
     doors_status = sensor.running_status()
-    coleman = doors_status['coleman']
     bush = doors_status['bush']
+    coleman = doors_status['coleman']
     schaper = doors_status['schaper']
     mota = doors_status['mota']
 
@@ -115,6 +115,7 @@ def data_change(root):
 # Initializes display, sets to full-screen mode
 root = Tk()
 root.attributes("-fullscreen", True)
+root.config(cursor="none")
 app = DoorDisplay(root)
 data_change(root)
 root.mainloop()

@@ -1,11 +1,13 @@
 import requests
-import time
+import os
 
-openHAB_IP = '10.76.100.166'
+openHAB_IP = '172.31.228.44'
+oldOpenHAB_IP = '10.76.100.166'
+
 mock_get_status_url = 'http://0.0.0.0:5000/get_status?name='
 mock_is_door_name_url = 'http://0.0.0.0:5000/is_door_name?name='
-get_status_url = 'http://10.76.100.166:8080/get_status?name='
-is_door_name_url = 'http://10.76.100.166:8080/is_door_name?name='
+get_status_url = 'http://172.31.228.44:5000/get_status?name='
+is_door_name_url = 'http://172.31.228.44:5000/is_door_name?name='
 
 
 class ClientSideDoorSensor:
@@ -21,11 +23,13 @@ class ClientSideDoorSensor:
     def running_status(self):
         door_status = {}
         dct = {}
-        infile = open('config.txt', 'r')
+##        dir_path = os.path.dirname(os.path.realpath('config.txt'))
+        #infile = open(dir_path + '/config.txt', 'r')
+        infile = open('/home/pi/faculty-door-sensor/ClientSideDoorSensor/config.txt', 'r')
         for door_name in infile:
-            if self.is_door_name(mock_is_door_name_url + door_name):
+            if self.is_door_name(is_door_name_url + door_name):
                 door_name = door_name.strip()
-                door_status[door_name] = mock_get_status_url + door_name
+                door_status[door_name] = get_status_url + door_name
         infile.close()
 
         for door in door_status:
