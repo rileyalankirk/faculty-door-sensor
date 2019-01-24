@@ -3,7 +3,7 @@ from flask import Flask, request
 from door_status import DoorStatus
 import logging
 
-logging.basicConfig(filename='example.log', level=logging.INFO)
+logging.basicConfig(filename='server_logs.log', format='%(asctime)s %(levelname)-8s %(message)s', level=logging.INFO, datefmt='%Y-%m-%d %H:%M:%S')
 
 
 class Server:
@@ -23,9 +23,14 @@ def get_status():
     try:
         name = request.args['name']
         if name is None:
+            logging.warning("Door missing name argument in get_status!")
             return "No name given", 404
-        return server.doors.get_status(name), 200
+        logging.info('Attempting to get status of door: {}'.format(name))
+        status = server.doors.get_status(name)
+        logging.info('Received status of door: {}'.format(name))
+        return status, 200
     except KeyError:
+        logging.error('{} was not found in the system.'.format(name))
         return "Name not found", 400
 
 

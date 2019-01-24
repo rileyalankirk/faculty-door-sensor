@@ -27,10 +27,10 @@ class DoorStatus:
     def get_status(self, name):
 
         if name not in urls and len(name) > 0:                 # Invalid Name
-            return "Name not recognized: <" + name + ">";
+            return "Name not recognized: <{}>".format(name)
 
         elif name == "":                                       # No name
-            return "No name provided! Example: coleman";
+            return "No name provided! Example: coleman"
 
         try:
             result = requests.get(urls[name])
