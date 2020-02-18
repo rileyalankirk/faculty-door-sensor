@@ -1,6 +1,4 @@
 Flask
-logging
 pytest
 request
 requests
-tkinter
