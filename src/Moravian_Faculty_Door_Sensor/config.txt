@@ -1,4 +1,0 @@
-coleman,http://172.31.228.44:8080/rest/items/ColemanDoor_BinarySensor
-schaper,http://172.31.228.44:8080/rest/items/SchaperDoor_BinarySensor
-bush,http://172.31.228.44:8080/rest/items/BushDoor_BinarySensor
-mota,http://172.31.228.44:8080/rest/items/MotaDoor_BinarySensor
