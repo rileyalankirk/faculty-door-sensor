@@ -1,4 +1,4 @@
-from door_status import DoorStatus
+from FacultyDoorSensor.server_side import DoorStatus
 
 
 class MockDoorStatus:

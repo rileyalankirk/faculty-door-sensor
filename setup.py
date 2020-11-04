@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="faculty-door-sensor",
+    name="FacultyDoorSensor",
     packages=find_packages('src'),
     package_dir={'': 'src'}
 )
