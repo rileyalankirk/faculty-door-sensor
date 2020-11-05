@@ -51,7 +51,7 @@ if __name__ == '__main__':
     server = create_server()
     # Run the server
     logging.info('Server beginning to run...')
-    server.app.run(host='localhost', port=8080, debug=False)
+    server.app.run(host='0.0.0.0', port=8080, debug=False)
     logging.info('Server successfully stopped.')
 
 
