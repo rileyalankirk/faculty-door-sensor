@@ -23,7 +23,6 @@ def create_server():
                 text = html.read()
             head, divs, end = text.strip().split('\n\n')
             divs = divs.split('\n')
-            print(door_status)
             for i, (name, status) in enumerate(door_status.items()):
                 if status == 'CLOSED':
                     color = 'red'
@@ -32,9 +31,8 @@ def create_server():
                 else:
                     color = 'orange'
                     status = 'NULL'
-                divs[i].replace('---', color, 1)
-                divs[i].replace('---', name, 1)
-                divs[i].replace('---', status, 1)
+                for val in [color, name, status]:
+                    divs[i] = divs[i].replace('---', val, 1)
             divs = '\n'.join(divs)
             website = f'{head}\n{divs}\n{end}'
             return website, 200
