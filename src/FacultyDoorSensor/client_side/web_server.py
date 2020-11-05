@@ -1,5 +1,5 @@
 from flask import Flask, request
-from FacultyDoorSensor.server_side import DoorStatus
+from FacultyDoorSensor.client_side import ClientSideDoorStatus
 import logging
 
 logging.basicConfig(filename='server_logs.log', format='%(asctime)s %(levelname)-8s %(message)s',
@@ -9,7 +9,7 @@ logging.basicConfig(filename='server_logs.log', format='%(asctime)s %(levelname)
 class WebServer:
     def __init__(self):
         self.app = Flask(__name__)
-        self.doors_status = DoorStatus()
+        self.doors_status = ClientSideDoorStatus()
 
 def create_server():
     '''Create server, add endpoints, and return the server'''
@@ -18,17 +18,12 @@ def create_server():
     @server.app.route('/')
     def website():
         try:
-            statuses = []
-            for name in server.doors_status.doors:
-                logging.info(f'Attempting to get status of door: {name}')
-                statuses.append((name, server.doors_status.get_status(name)))
-                logging.info(f'Received status of door: {name}')
+            door_status = server.doors_status.running_status()
             with open('base.html', 'r') as html:
                 text = html.read()
             head, divs, end = text.strip().split('\n\n')
             divs = divs.split('\n')
-            for i in range(len(divs)):
-                name, status = statuses[i]
+            for i, (name, status) in enumerate(door_status.items()):
                 if status == 'CLOSED':
                     color = 'red'
                 elif status == 'OPEN':
