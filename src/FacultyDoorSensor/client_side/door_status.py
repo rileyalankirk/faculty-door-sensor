@@ -8,6 +8,17 @@ get_status_url = base_url + 'get_status?name='
 is_door_name_url = base_url + 'is_door_name?name='
 
 
+class DoorState():
+    def __init__(self, name, status):
+        self.name = name
+        if status in ['CLOSED', 'OPEN']:
+            self.status = status
+            self.color = 'red' if status == 'CLOSED' else 'green'
+        else:
+            self.status = 'NULL'
+            self.color = 'orange'
+
+
 class ClientSideDoorStatus:
     def __init__(self):
         self.doors = []
@@ -27,3 +38,11 @@ class ClientSideDoorStatus:
             status = requests.get(get_status_url + door).text
             self.door_status[door] = status
         return self.door_status
+
+    def status_as_door_states(self, status=None):
+        new_status = []
+        if status == None:
+            status = self.door_status
+        for name, state in status.items():
+            new_status.append(DoorState(name, state))
+        return new_status
