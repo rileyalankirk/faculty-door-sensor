@@ -23,6 +23,7 @@ def create_server():
                 text = html.read()
             head, divs, end = text.strip().split('\n\n')
             divs = divs.split('\n')
+            print(door_status)
             for i, (name, status) in enumerate(door_status.items()):
                 if status == 'CLOSED':
                     color = 'red'
