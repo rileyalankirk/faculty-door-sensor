@@ -31,7 +31,7 @@ def create_server():
                 else:
                     color = 'orange'
                     status = 'NULL'
-                for val in [color, name, status]:
+                for val in [color, name.capitalize(), status]:
                     divs[i] = divs[i].replace('---', val, 1)
             divs = '\n'.join(divs)
             website = f'{head}\n{divs}\n{end}'
