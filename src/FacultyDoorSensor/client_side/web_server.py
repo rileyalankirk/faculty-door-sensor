@@ -1,5 +1,7 @@
+from datetime import datetime
 from flask import Flask, request, render_template
 from FacultyDoorSensor.client_side import ClientSideDoorStatus
+from redis import Redis
 import logging
 
 
@@ -11,10 +13,14 @@ class WebServer:
     def __init__(self):
         self.app = Flask(__name__)
         self.doors_status = ClientSideDoorStatus()
+        self.redis = Redis()
+
 
 def create_server():
     '''Create server, add endpoints, and return the server'''
     server = WebServer()
+    # Save database every hour if 1000+ changes were made
+    server.redis.execute_command('SAVE 3600 1000')
 
     @server.app.route('/')
     def website():
@@ -22,6 +28,11 @@ def create_server():
             # Update door states and retrieve them
             server.doors_status.running_status()
             door_status = server.doors_status.status_as_door_states()
+            for door_state in door_status:
+                if door_state.status == 'OPEN':
+                    time = datetime.now()
+                    weekday = time.weekday() # 0 - 6 (0 is Monday)
+                    server.redis.incr(f'{door_state.name}{weekday}{time.hour}', 5)
             # Capitalize names
             for i in range(len(door_status)):
                 door_status[i].name = door_status[i].name.capitalize()
@@ -41,7 +52,6 @@ if __name__ == '__main__':
     server = create_server()
     # Run the server
     logging.info('Server beginning to run...')
-    server.app.run(host='0.0.0.0', port=8080, debug=False)
+    server.app.run(host='0.0.0.0', port=80, debug=False)
+    server.redis.bgsave()
     logging.info('Server successfully stopped.')
-
-
