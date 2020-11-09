@@ -14,13 +14,12 @@ class WebServer:
         self.app = Flask(__name__)
         self.doors_status = ClientSideDoorStatus()
         self.redis = Redis()
+        self.last_save = datetime.now()
 
 
 def create_server():
     '''Create server, add endpoints, and return the server'''
     server = WebServer()
-    # Save database every hour if 1000+ changes were made
-    server.redis.execute_command('SAVE 3600 1000')
 
     @server.app.route('/')
     def website():
@@ -31,8 +30,11 @@ def create_server():
             for door_state in door_status:
                 if door_state.status == 'OPEN':
                     time = datetime.now()
+                    if (time - server.last_save).seconds > 60:
+                        server.redis.bgsave()
+                        server.last_save = time
                     weekday = time.weekday() # 0 - 6 (0 is Monday)
-                    server.redis.incr(f'{door_state.name}{weekday}{time.hour}', 5)
+                    server.redis.incrby(f'{door_state.name}{weekday}{time.hour}', 5)
             # Capitalize names
             for i in range(len(door_status)):
                 door_status[i].name = door_status[i].name.capitalize()
@@ -52,6 +54,6 @@ if __name__ == '__main__':
     server = create_server()
     # Run the server
     logging.info('Server beginning to run...')
-    server.app.run(host='0.0.0.0', port=80, debug=False)
-    server.redis.bgsave()
+    server.app.run(host='0.0.0.0', port=8080, debug=False)
+    server.redis.save()
     logging.info('Server successfully stopped.')
