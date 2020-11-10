@@ -31,7 +31,7 @@ def create_server():
                 if door_state.status == 'OPEN':
                     time = datetime.now()
                     if (time - server.last_save).seconds > 60:
-                        server.redis.bgsave()
+                        server.redis.save()
                         server.last_save = time
                     weekday = time.weekday() # 0 - 6 (0 is Monday)
                     server.redis.incrby(f'{door_state.name}{weekday}{time.hour}', 5)
