@@ -1,4 +1,3 @@
-from collections import defaultdict
 from datetime import datetime
 from FacultyDoorSensor.client_side import ClientSideDoorStatus
 from redis import Redis
@@ -10,7 +9,7 @@ def collect_data(redis):
     doors_status = ClientSideDoorStatus()
 
     last_save = datetime.now()
-    prev_incr = defaultdict(datetime.datetime, datetime.now())
+    prev_incr = {}
     while True:
         # Save redis every hour
         now = datetime.now()
@@ -25,6 +24,8 @@ def collect_data(redis):
             now = datetime.now()
             if door_state.status == 'OPEN':
                 weekday = now.weekday() # 0 - 6 (0 is Monday)
+                if door_state.name not in prev_incr:
+                    prev_incr[door_state.name] = datetime.now()
                 time_open = (now - prev_incr[door_state.name]).total_seconds()
                 redis.hincrbyfloat(door_state.name, f'{weekday}{now.hour}', time_open)
             prev_incr[door_state.name] = now

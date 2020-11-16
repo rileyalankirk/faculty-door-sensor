@@ -38,6 +38,14 @@ def create_server():
             data[hour] /= sum_data[day]/100
         return data
 
+    def retrieve_data(name):
+        '''Retrieves redis data and converts its keys and values from bytestrings to strings and floats'''
+        new_data = {}
+        data = server.redis.hgetall(name)
+        for key in data:
+            new_data[key.decode()] = float(data[key].decode())
+        return new_data
+
     @server.app.route('/', methods=['GET'])
     def website():
         try:
@@ -68,7 +76,7 @@ def create_server():
             for door in door_status:
                 if name.lower() == door.name:
                     door_exists_for_name = True
-                    door_status = door
+                    door_status = door.name
                     break
             if not door_exists_for_name:
                 return f'Door for {name.lower()} does not exist', 404
@@ -80,18 +88,19 @@ def create_server():
             return f'Format {data_format} does not exist', 400
         
         # Calculate statistics
-        data = redis.hgetall(door.name)
+        data = retrieve_data(door_status)
         if data_format == 'normalized':
             data = normalize_data(data)
 
-        return jsonify({door.name: data}), 200
+        return jsonify({door_status: data}), 200
 
     @server.app.route('/stats', methods=['GET'])
     def stats():
         door_status = update_door_states()
         data = []
         for door in door_status:
-            data.append(redis.hgetall(door.name))
+            data.append(retrieve_data(door.name))
+
         return '', 200
 
     return server
