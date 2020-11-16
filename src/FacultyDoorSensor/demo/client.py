@@ -1,16 +1,22 @@
-from .add_data import add_data
+from add_data import add_data
 import requests
 
 
 def client():
+    names = ['coleman', 'bush', 'schaper', 'mota']
+    url = 'http://localhost:8080/data?name='
     # Get door stats from server
-    data = requests.get('localhost:8080')
-    print(data)
+    print('Original Data\n')
+    for name in names:
+        data = requests.get(f'{url}{name}')
+        print(data.text, end='')
     # Update data
     add_data()
     # Get updated door stats from server
-    data = requests.get('localhost:8080')
-    print(data)
+    print('\nUpdated Data\n')
+    for name in names:
+        data = requests.get(f'{url}{name}')
+        print(data.text, end='')
 
 
 

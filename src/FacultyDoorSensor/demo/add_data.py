@@ -11,7 +11,7 @@ def add_data():
     weekday = now.weekday() # 0 - 6 (0 is Monday)
     hour = now.hour
     for name in names:
-        redis.hincrbyfloat(name, f'{weekday}{hour}', 10*random.rand())
+        redis.hincrbyfloat(name, f'{weekday}{hour}', 10*random.random())
 
 
 if __name__ == "__main__":
