@@ -62,6 +62,19 @@ Redis
     * Run `redis-server`
     * Run `python3 collect_data.py`
 
+## Scripts and Services
+To have the webserver and data collection run on boot, we need to start and enable their services
+* Make sure you are in the root of the repository in the faculty-door-sensor directory
+* To make scripts executable run `sudo chmod -x scripts/*.sh`
+* Copy services into the system directory `sudo cp scripts/*.service /etc/systemd/system`
+* Start and enable services (redis first)
+    * `sudo systemctl start redisserver.service`
+    * `sudo systemctl enable redisserver.service`
+    * `sudo systemctl start datacollect.service`
+    * `sudo systemctl enable datacollect.service`
+    * `sudo systemctl start webserver.service`
+    * `sudo systemctl enable webserver.service`
+
 ## View Website
 * On computer running webserver
     * In a web browser, type `localhost:8080` in the address bar
