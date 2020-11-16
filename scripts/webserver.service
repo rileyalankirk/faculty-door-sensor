@@ -1,0 +1,10 @@
+[Unit]
+Description=Start The Door Sensor Web Server
+Requires=network.target
+
+[Service]
+Type=simple
+ExecStart=/home/pi/faculty-door-sensor/scripts/run_web_server.sh
+
+[Install]
+WantedBy=multi-user.target

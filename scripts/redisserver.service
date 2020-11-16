@@ -1,0 +1,10 @@
+[Unit]
+Description=Start the Redis Server
+Requires=network.target
+
+[Service]
+Type=simple
+ExecStart=/home/pi/faculty-door-sensor/scripts/run_redis.sh
+
+[Install]
+WantedBy=multi-user.target

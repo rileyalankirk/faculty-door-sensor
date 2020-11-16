@@ -1,0 +1,10 @@
+[Unit]
+Description=Collect Data from Door Sensors
+Requires=network.target
+
+[Service]
+Type=simple
+ExecStart=/home/pi/faculty-door-sensor/scripts/run_collect_data.sh
+
+[Install]
+WantedBy=multi-user.target
