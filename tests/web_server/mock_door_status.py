@@ -1,16 +1,16 @@
 from FacultyDoorSensor.client_side import ClientSideDoorStatus, DoorState
-import random
+import os
 
 
 class MockClientSideDoorStatus(ClientSideDoorStatus):
     def __init__(self):
          super().__init__()
-         self.choices = ['CLOSED', 'OPEN']
-
 
     # Override the function we want to mock
     def running_status(self):
-        for door in self.doors:
-            status = random.choice(self.choices)
-            self.door_status[door] = status
+        path = os.path.realpath('mock_status.txt')
+        with open(path, 'r') as config:
+            for door in config:
+                door, status = door.strip().split(',')
+                self.door_status[door] = status
         return self.door_status

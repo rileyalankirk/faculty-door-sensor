@@ -16,9 +16,8 @@ class WebServer:
         self.redis = Redis()
 
 
-def create_server():
+def create_server(server=WebServer()):
     '''Create server, add endpoints, and return the server'''
-    server = WebServer()
 
     def update_door_states():
         '''Update door states and retrieve them'''
