@@ -26,11 +26,14 @@ Python
 
 Redis 
 * Install with `sudo apt install redis`
+* To make sure redis' default setup does not interfere:
+    * Stop redis if it is running with `sudo systemctl stop redis`
+    * Disable redis service from running on boot `sudo systemctl disable redis`
 
 ## Setup
 * Create a virtual environment
     * Make sure you are in the root of the repository in the faculty-door-sensor directory
-    * Run `python3 -m venv .venv` to setup the virtual environment in the directory .venv/
+    * Run `python3 -m venv .venv` to create the virtual environment in the directory .venv/
     * Run `. .venv/bin/activate` to activate the virtual environment
 * Install the required Python libraries with `pip3 install -r requirements.txt`
 * Install the project's source code as an editable package with `pip3 install -e .`
@@ -67,7 +70,7 @@ To have the webserver and data collection run on boot, we need to start and enab
 * Make sure you are in the root of the repository in the faculty-door-sensor directory
 * To make scripts executable run `sudo chmod -x scripts/*.sh`
 * Copy services into the system directory `sudo cp scripts/*.service /etc/systemd/system`
-* Start and enable services (redis first)
+* Start and enable services (redisserver first)
     * `sudo systemctl start redisserver.service`
     * `sudo systemctl enable redisserver.service`
     * `sudo systemctl start datacollect.service`
