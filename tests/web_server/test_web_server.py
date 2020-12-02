@@ -1,3 +1,4 @@
+from add_data import add_data
 from bs4 import BeautifulSoup
 from FacultyDoorSensor.client_side import collect_data, create_server, WebServer
 from mock_door_status import MockClientSideDoorStatus
@@ -12,11 +13,12 @@ def setup_test():
     server.app.config['TESTING'] = True
     return server, server.app.test_client()
 
-def test_website_no_params():
+
+def test_website():
     # Get a test server and mock client
     server, client = setup_test()
 
-    # Use the test client to get a value
+    # Make get request to root endpoint
     result = client.get('/')
 
     # Make sure a webpage was successfully returned before converting the page into a soup object
@@ -48,10 +50,69 @@ def test_website_no_params():
     correct_statuses = ['CLOSED', 'OPEN', 'CLOSED', 'OPEN']
     assert correct_statuses == statuses
 
+def test_get_stats():
+    return # TODO: Remove when finished below todos
 
-# TODO: Write tests...
-    # endpoints with no params
-    # endpoints with bad params
-    # endpoints with good params
-    # test that values in html are correct
-    # test nonexistent endpoints
+    # Get a test server and mock client
+    server, client = setup_test()
+
+    # Make get request to stats endpoint
+    # TODO: need to mock out redis
+    result = client.get('/stats')
+    assert result.status_code == 200
+
+    # TODO: finish testing stats endpoint
+
+def test_get_data_no_params():
+    # Get a test server and mock client
+    server, client = setup_test()
+
+    # Make get request to data endpoint
+    result = client.get('/data')
+    assert result.status_code == 400
+    correct_response = 'Name parameter was missing'
+    assert result.data.decode() == correct_response
+
+def test_get_data_with_format_parameter():
+    # Get a test server and mock client
+    server, client = setup_test()
+
+    # Make get request to data endpoint
+    result = client.get('/data?format=normalized')
+    assert result.status_code == 400
+    correct_response = 'Name parameter was missing'
+    assert result.data.decode() == correct_response
+
+def test_get_data_with_name_parameter():
+    # Get a test server and mock client
+    server, client = setup_test()
+
+    # Add data to redis database
+    add_data(server.redis)
+
+    # Make get request to data endpoint
+    result = client.get('/data?name=coleman')
+    assert result.status_code == 200
+    # Test response
+    correct_response = {'coleman': {'012': 10.0}}
+    assert result.json == correct_response
+
+    # Clear redis database
+    server.redis.flushdb()
+
+def test_get_data_with_name_and_format_parameters():
+    # Get a test server and mock client
+    server, client = setup_test()
+
+    # Add data to redis database
+    add_data(server.redis)
+
+    # Make get request to data endpoint
+    result = client.get('/data?name=coleman&format=normalized')
+    assert result.status_code == 200
+    # Test response
+    correct_response = {'coleman': {'012': 100.0}}
+    assert result.json == correct_response
+
+    # Clear redis database
+    server.redis.flushdb()
