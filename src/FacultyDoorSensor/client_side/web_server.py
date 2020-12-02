@@ -26,7 +26,7 @@ def create_server(server=WebServer()):
     
     def normalize_data(data):
         '''Normalizes data relative to each weekday'''
-        sum_data = defaultdict(float, 0)
+        sum_data = defaultdict(lambda: 0)
         # Sum all data
         for hour in data:
             day = hour[0]
@@ -100,6 +100,7 @@ def create_server(server=WebServer()):
         for door in door_status:
             data.append(retrieve_data(door.name))
 
+        # TODO: Finish stats website creation
         return '', 200
 
     return server

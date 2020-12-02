@@ -19,6 +19,5 @@ def client():
         print(data.text, end='')
 
 
-
 if __name__ == '__main__':
     client()
