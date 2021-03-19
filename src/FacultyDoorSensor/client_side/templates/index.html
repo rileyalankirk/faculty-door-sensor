@@ -5,11 +5,13 @@
     <style>
         body {background-color: orange;overflow: hidden;}
         div {color: black;text-align: center;background-color: orange;width: 50%;height: 50%;position: absolute;}
+        .div-time {z-index: 1;width: 24%;height: 16%;top: 42%; left: 38%;border-color: black;border-style: solid;display: flex;justify-content: center;align-content: center;flex-direction: column;background-color:rgb(141, 196, 221)}
         .div-left {left: 0%}
         .div-right {right: 0%}
         .div-top {top: 0%}
         .div-bottom {bottom: 0%}
         {% if doors %}
+        #time {font-size:5vw}
         #left-top {background-color: {{doors[0].color}}}
         #right-top {background-color: {{doors[1].color}}}
         #left-bottom {background-color: {{doors[2].color}}}
@@ -40,5 +42,15 @@
                 {% if doors %} <p>Dr. {{doors[3].name}}'s door is:</br>{{doors[3].status}}</p> {% endif %}
             </div>
         </div>
+        <div class="div-time">
+            <span id="time"> </span>
+        </div>>
+        <script>
+            let time = new Date();
+            let hours = time.getHours();
+            let meridian = (hours > 12) ? " PM" : " AM"
+            if (hours > 12) { hours -= 12; }
+            document.getElementById("time").innerHTML = hours + ":" + time.getMinutes() + meridian;
+        </script> 
     </body>
 </html>
