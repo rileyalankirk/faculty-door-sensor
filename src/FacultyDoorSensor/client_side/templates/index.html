@@ -50,7 +50,9 @@
             let hours = time.getHours();
             let meridian = (hours > 12) ? " PM" : " AM"
             if (hours > 12) { hours -= 12; }
-            document.getElementById("time").innerHTML = hours + ":" + time.getMinutes() + meridian;
+            let  minutes = time.getMinutes();
+            if (minutes < 10) { minutes = "0" + minutes; }
+            document.getElementById("time").innerHTML = hours + ":" + minutes + meridian;
         </script> 
     </body>
 </html>
