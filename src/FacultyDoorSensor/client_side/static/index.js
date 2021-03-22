@@ -1,6 +1,5 @@
 'use strict';
 
-const BASE_URL = 'http://127.0.0.1:8080'
 
 function capitalize(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -25,7 +24,7 @@ window.addEventListener('load', function init() {
 })
 
 const updateDashboardData = () => {
-    fetch(`${BASE_URL}/data`)
+    fetch(window.location.href + '/data')
     .then(response => response.json())
     .then(doorStatuses => {
         const { 
