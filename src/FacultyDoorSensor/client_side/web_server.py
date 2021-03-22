@@ -1,5 +1,6 @@
 from collections import defaultdict
-from flask import Flask, jsonify, request, render_template
+from flask import Flask, Response, jsonify, request, render_template
+from flask_cors import CORS, cross_origin
 from FacultyDoorSensor.client_side import ClientSideDoorStatus
 from redis import Redis
 import logging
@@ -14,6 +15,7 @@ class WebServer:
         self.app = Flask(__name__)
         self.doors_status = ClientSideDoorStatus()
         self.redis = Redis()
+        CORS(self.app, resources={r'/data': {'origins': '*'}})
 
 
 def create_server(server=WebServer()):
@@ -62,7 +64,29 @@ def create_server(server=WebServer()):
         return render_template('index.html'), 200
 
     @server.app.route('/data', methods=['GET'])
-    def get_data():
+    def data():
+        '''Return statistics in a json format'''
+        # Update door states and retrieve them
+        door_status = update_door_states()
+        # Change door status data to JSON format
+        door_status = {
+            'name1': door_status[0].name,
+            'status1': door_status[0].status,
+            'color1': door_status[0].color,
+            'name2': door_status[1].name,
+            'status2': door_status[1].status,
+            'color2': door_status[1].color,
+            'name3': door_status[2].name,
+            'status3': door_status[2].status,
+            'color3': door_status[2].color,
+            'name4': door_status[3].name,
+            'status4': door_status[3].status,
+            'color4': door_status[3].color
+        }
+        return jsonify(door_status), 200
+
+    @server.app.route('/stats', methods=['GET'])
+    def stats():
         '''Return statistics in a json format'''
         # Update door states and retrieve them
         door_status = update_door_states()
@@ -93,8 +117,8 @@ def create_server(server=WebServer()):
 
         return jsonify({door_status: data}), 200
 
-    @server.app.route('/stats', methods=['GET'])
-    def stats():
+    @server.app.route('/stats_website', methods=['GET'])
+    def stats_website():
         door_status = update_door_states()
         data = []
         for door in door_status:

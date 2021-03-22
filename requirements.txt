@@ -1,5 +1,6 @@
 BeautifulSoup4
 Flask
+Flask-cors
 pytest
 redis
 requests
